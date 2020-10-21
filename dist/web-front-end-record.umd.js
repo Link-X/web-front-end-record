@@ -1,1 +1,1 @@
-!function(n){"function"==typeof define&&define.amd?define(n):n()}((function(){"use strict";console.log(1),console.log("aaaa"+"123")}));
+!function(e,o){"object"==typeof exports&&"undefined"!=typeof module?module.exports=o():"function"==typeof define&&define.amd?define(o):(e="undefined"!=typeof globalThis?globalThis:e||self).record=o()}(this,(function(){"use strict";return console.log(1),console.log("aaaa"+"123"),1}));

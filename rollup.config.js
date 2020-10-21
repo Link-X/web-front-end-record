@@ -19,6 +19,7 @@ const moduleDatas = {
         output: {
             format: 'umd',
             file: resolve('./dist/web-front-end-record.umd.js'),
+            name: 'record'
         },
     },
     cjs: {
