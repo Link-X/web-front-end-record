@@ -1,13 +1,22 @@
 {
   "name": "web-front-end-record",
   "version": "1.0.0",
-  "description": "this is simpleness record in web front end project",
+  "description": "this is simpleness record in web-front-end-record project",
   "main": "./src/main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build:esm": "rollup -c --environment MODULE:esm",
     "build:umd": "rollup -c --environment MODULE:umd",
     "build:cjs": "rollup -c --environment MODULE:cjs"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*./src/**/*.{js,ts,json}": [
+      "prettier --write"
+    ]
   },
   "repository": {
     "type": "git",
