@@ -2,14 +2,11 @@ import json from 'rollup-plugin-json'
 import nodeResolve from 'rollup-plugin-node-resolve'
 import babel from 'rollup-plugin-babel'
 import { terser } from 'rollup-plugin-terser'
-
 const path = require('path')
 
 const resolve = function (...args) {
     return path.resolve(__dirname, ...args)
 }
-
-const extensions = ['.js', '.ts']
 
 const moduleDatas = {
     esm: {
@@ -33,6 +30,7 @@ const moduleDatas = {
 }
 
 const modulesConfig = moduleDatas[process.env.MODULE]
+const extensions = ['.js', '.ts']
 
 export default {
     input: resolve('./src/index.ts'),
