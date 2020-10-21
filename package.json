@@ -1,0 +1,31 @@
+{
+  "name": "web-front-end-record",
+  "version": "1.0.0",
+  "description": "this is simpleness record in web front end project",
+  "main": "./src/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rollup -c"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Link-X/web-front-end-record.git"
+  },
+  "author": "xudb",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Link-X/web-front-end-record/issues"
+  },
+  "homepage": "https://github.com/Link-X/web-front-end-record#readme",
+  "devDependencies": {
+    "@babel/core": "^7.12.3",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-preset-latest": "^6.24.1",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-json": "^4.0.0",
+    "rollup-plugin-node-resolve": "^5.2.0"
+  },
+  "dependencies": {
+    "@babel/preset-env": "^7.12.1"
+  }
+}
