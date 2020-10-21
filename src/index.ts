@@ -1,8 +1,17 @@
-import { abc } from './a'
+import { getBrowserVar, getTimeData } from './variate/index'
 
-var a: number = 1
-console.log(a)
+const getLoadTime = () => {
+    const preLoad: (e: Event) => any = window.onload
+    window.onload = (e: Event) => {
+        if (preLoad && typeof preLoad === 'function') {
+            preLoad(e)
+        }
+        window.requestIdleCallback = window.requestIdleCallback || setTimeout
 
-console.log(abc<string>('aaaa'))
+        window.requestIdleCallback(() => {
+            console.log(getBrowserVar(), getTimeData())
+        })
+    }
+}
 
-export default a
+getLoadTime()
