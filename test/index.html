@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <link href="../dist/b/a.css" />
+    <script src="../dist/web-front-end-record.umd.js"></script>
+    <script src="../asfd.js"></script>
+    <body>
+        <!-- <img src="./aa.png" /> -->
+        <div id='abc'>1234</div>
+    </body>
+    <script>
+        var abc = document.querySelector("#abc")
+        abc.addEventListener('click', (e)=> {
+            console.log('111')
+            console.log(oll)
+        })
+    </script>
+    <script>
+        const a = new Promise((res, rej) => {
+            throw '1234'
+            res('aaa')
+        })
+
+        a.then((res) => {
+            console.log(res)
+        })
+        setTimeout(() => {
+            var a = new Array(-1)
+        })
+        throw new Error('出错了！')
+    </script>
+</html>

@@ -1,3 +1,4 @@
+import { send } from '@/utils/index'
 const performance: Performance = window.performance || window.msPerformance || window.webkitPerformance
 
 /** 获取超时文件 */
@@ -55,8 +56,9 @@ export const countTime = (): variateType.loadType => {
 export const getTimeData = (): variateType.getTimeData => {
     const resourceList = getTimeoutRes()
     const timeData = countTime()
-    return {
+    return send<variateType.getTimeData>({
+        sendTypeName: '页面加载数据',
         timeOut: resourceList,
         timeData,
-    }
+    })
 }

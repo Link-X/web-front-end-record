@@ -1,19 +1,46 @@
+import { send } from '@/utils/index'
+
+export const isWx = (): boolean => {
+    if (navigator.userAgent.match(/MicroMessenger\/([^\s]+)/)) {
+        return true
+    }
+    return false
+}
+
+export const getFacilityInfo = (): {isPc: boolean,facilityName: string} => {
+    const userAgentInfo = navigator.userAgent
+    const Agents = ['Android', 'iPhone', 'SymbianOS', 'Windows Phone', 'iPad', 'iPod']
+    let isPc = true
+    let facilityName = ''
+    for (var v = 0; v < Agents.length; v++) {
+        if (userAgentInfo.indexOf(Agents[v]) > 0) {
+            facilityName = Agents[v]
+            isPc = false
+            break
+        }
+    }
+    return {isPc, facilityName}
+}
+
 export const getBrowserVar = (): variateType.facilityBrowserType | {} => {
     if (!document || !window) {
         return {}
     }
-    const { domain, URL, title, referrer } = document
-    const { height, width, colorDepth } = window.screen
+    const { domain, URL: url, title, referrer } = document
+    const { height: screenH, width: screenW, colorDepth: screenColorDepth } = window.screen
     const { language, platform } = navigator
-    return {
+    return send<variateType.facilityBrowserType>({
+        sendTypeName: '设备数据',
+        isPc: isPc()
+        isWx: isWx(),
         domain,
-        URL,
+        url,
         title,
         referrer,
-        height,
-        width,
-        colorDepth,
+        screenW,
+        screenH,
+        screenColorDepth,
         language,
         platform,
-    }
+    })
 }

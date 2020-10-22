@@ -2,6 +2,7 @@ import json from 'rollup-plugin-json'
 import nodeResolve from 'rollup-plugin-node-resolve'
 import babel from 'rollup-plugin-babel'
 import { terser } from 'rollup-plugin-terser'
+import alias from '@rollup/plugin-alias'
 const path = require('path')
 
 const resolve = function (...args) {
@@ -19,7 +20,7 @@ const moduleDatas = {
         output: {
             format: 'umd',
             file: resolve('./dist/web-front-end-record.umd.js'),
-            name: 'record'
+            name: 'record',
         },
     },
     cjs: {
@@ -50,6 +51,10 @@ export default {
             extensions,
         }),
         terser(),
+
+        alias({
+            entries: [{ find: '@/utils', replacement: resolve('./src/utils') }],
+        }),
     ],
     external: [],
 }

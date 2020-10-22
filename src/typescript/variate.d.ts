@@ -1,6 +1,8 @@
 declare namespace variateType {
     /** 设备参数 */
     export interface facilityBrowserType {
+        /** send 类型 */
+        sendTypeName: string
         domain: string
         url: string
         title: string
@@ -53,12 +55,14 @@ declare namespace variateType {
         /** 请求总时间 */
         duration: number
         /** 请求网络协议 */
-        protocol: string 
+        protocol: string
         /** 发送请求网络类型 */
         type: string
     }
 
     export interface getTimeData {
+        /** send 类型 */
+        sendTypeName: string
         timeData: loadType
         timeOut: timeOutDataType[]
     }

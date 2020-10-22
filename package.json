@@ -1,7 +1,7 @@
 {
   "name": "web-front-end-record",
   "version": "1.0.0",
-  "description": "this is simpleness record in web-front-end-record project",
+  "description": "this is simpleness record in web-front-end-record project. 这是一个js性能和错误报告jsdk",
   "main": "./src/main.js",
   "scripts": {
     "build:esm": "rollup -c --environment MODULE:esm",
@@ -32,6 +32,7 @@
     "@babel/core": "^7.12.3",
     "@babel/preset-env": "^7.12.1",
     "@babel/preset-typescript": "^7.12.1",
+    "@rollup/plugin-alias": "^3.1.1",
     "@typescript-eslint/eslint-plugin": "^4.5.0",
     "@typescript-eslint/parser": "^4.5.0",
     "D": "^1.0.0",
