@@ -1,5 +1,8 @@
 declare namespace webRecord {
     export interface Iprops {
+        /** 是否打印 */
+        log: boolean
+
         key: string
         /** 上报url */
         reportUrl: string

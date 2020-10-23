@@ -4,7 +4,7 @@ import { resourceErrorHandler, scriptErrorHandler } from './events'
 type performParams = 'resourceErrorHandler' | 'scriptErrorHandler' | 'promiseErrorHandler'
 
 class record {
-    private props: Iprops
+    private props: webRecord.Iprops
     private init: () => void
     private getUserData: () => void
     private propsChange: () => void
@@ -90,7 +90,8 @@ class record {
 
     sendData<T>(data: T): T {
         setTimeout(() => {
-            console.log({ ...data, ...{ title: this.userData.browser.pcInfo }, ...this.props })
+            this.props.log &&
+                console.log({ ...data, ...{ title: this.userData.browser.pcInfo }, ...this.props })
         }, this.props.outtime || 0)
         return data
     }
