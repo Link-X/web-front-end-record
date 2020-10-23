@@ -20,9 +20,9 @@ export const getFacilityInfo = (): { isPc: boolean; facilityName: string } => {
     return { isPc, facilityName }
 }
 
-export const getBrowserVar = (): variateType.facilityBrowserType | {} => {
+export const getBrowserVar = (): variateType.facilityBrowserType => {
     if (!document || !window) {
-        return {}
+        return {} as variateType.facilityBrowserType
     }
     const { domain, URL: url, title, referrer } = document
     const { height: screenH, width: screenW, colorDepth: screenColorDepth } = window.screen
