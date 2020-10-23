@@ -78,4 +78,110 @@ const observer = new MutationObserver((mutationList) => {
 })
 observer.observe(document.documentElement, options)
 
+const onMutationChange = (mutationsList) => {
+    const getFlowId = (node) => {
+        if (node) {
+            // 新插入的DOM没有标记，所以这里需要兼容
+            if (!node.__flow) node.__flow = { id: uuid() }
+            return node.__flow.id
+        }
+    }
+    mutationsList.forEach((mutation) => {
+        const { target, type, attributeName } = mutation
+        const record = {
+            type,
+            target: getFlowId(target),
+        }
+        switch (type) {
+            case 'characterData':
+                record.value = target.nodeValue
+                break
+            case 'attributes':
+                record.attributeName = attributeName
+                record.attributeValue = target.getAttribute(attributeName)
+                break
+            case 'childList':
+                record.removedNodes = [...mutation.removedNodes].map((n) => getFlowId(n))
+                record.addedNodes = [...mutation.addedNodes].map((n) => {
+                    const snapshot = this.takeSnapshot(n)
+                    return {
+                        ...snapshot,
+                        nextSibling: getFlowId(n.nextSibling),
+                        previousSibling: getFlowId(n.previousSibling),
+                    }
+                })
+                break
+        }
+        this.records.push(record)
+    })
+}
+
+function takeSnapshot(node, options = {}) {
+    this.markNodes(node)
+    const snapshot = {
+        vdom: createVirtualDom(node),
+    }
+    if (options.doctype === true) {
+        snapshot.doctype = document.doctype.name
+        snapshot.clientWidth = document.body.clientWidth
+        snapshot.clientHeight = document.body.clientHeight
+    }
+    return snapshot
+}
+
+window.addEventListener('input', this.onFormInput, true)
+
+window.addEventListener('change', this.onFormChange, true)
+
+window.addEventListener('focus', this.onFormFocus, true)
+
+window.addEventListener('blur', this.onFormBlur, true)
+
+onFormInput = (event) => {
+    const target = event.target
+    if (target && target.__flow && ['select', 'textarea', 'input'].includes(target.tagName.toLowerCase())) {
+        this.records.push({
+            type: 'input',
+            target: target.__flow.id,
+            value: target.value,
+        })
+    }
+}
+
+onFormChange = (event) => {
+    const target = event.target
+    if (target && target.__flow) {
+        if (
+            target.tagName.toLowerCase() === 'input' &&
+            ['checkbox', 'radio'].includes(target.getAttribute('type'))
+        ) {
+            this.records.push({
+                type: 'checked',
+                target: target.__flow.id,
+                checked: target.checked,
+            })
+        }
+    }
+}
+
+onFormFocus = (event) => {
+    const target = event.target
+    if (target && target.__flow) {
+        this.records.push({
+            type: 'focus',
+            target: target.__flow.id,
+        })
+    }
+}
+
+onFormBlur = (event) => {
+    const target = event.target
+    if (target && target.__flow) {
+        this.records.push({
+            type: 'blur',
+            target: target.__flow.id,
+        })
+    }
+}
+
 export default createVirtualDom
