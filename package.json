@@ -1,6 +1,6 @@
 {
   "name": "web-front-end-record",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "this is simpleness record in web-front-end-record project. 这是一个js性能和错误报告jsdk",
   "main": "./src/main.js",
   "scripts": {
@@ -23,6 +23,7 @@
     "url": "git+https://github.com/Link-X/web-front-end-record.git"
   },
   "author": "xudb",
+  "keywords": ["前端监控", "错误监控", "web监控", "js错误监控", "javaScript监控"],
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Link-X/web-front-end-record/issues"

@@ -76,3 +76,5 @@ const recordObj = new record({
 recordObj.eventMethod(document, 'error', 'resourceErrorHandler', true)
 recordObj.eventMethod(window, 'error', 'scriptErrorHandler', false)
 recordObj.eventMethod(window, 'unhandledrejection', 'promiseErrorHandler', false)
+
+export default recordObj

@@ -8,7 +8,7 @@ this is simpleness record in web front end project
 npm install web-front-end-record
 ```
 ```javascript
-import 'web-front-end-record/web-front-end-record.esm.js'
+import 'web-front-end-record/dist/web-front-end-record.esm.js'
 // or
 <script src="web-front-end-record/dist/web-front-end-record.umd.js"><script>
 ```
