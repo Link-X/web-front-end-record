@@ -1,6 +1,6 @@
 {
   "name": "web-front-end-record",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "this is simpleness record in web-front-end-record project. 这是一个js性能和错误报告jsdk",
   "main": "./src/main.js",
   "scripts": {
