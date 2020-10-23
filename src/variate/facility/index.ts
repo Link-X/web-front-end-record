@@ -1,5 +1,3 @@
-import { send } from '@/utils/index'
-
 export const isWx = (): boolean => {
     if (navigator.userAgent.match(/MicroMessenger\/([^\s]+)/)) {
         return true
@@ -7,7 +5,7 @@ export const isWx = (): boolean => {
     return false
 }
 
-export const getFacilityInfo = (): {isPc: boolean,facilityName: string} => {
+export const getFacilityInfo = (): { isPc: boolean; facilityName: string } => {
     const userAgentInfo = navigator.userAgent
     const Agents = ['Android', 'iPhone', 'SymbianOS', 'Windows Phone', 'iPad', 'iPod']
     let isPc = true
@@ -19,7 +17,7 @@ export const getFacilityInfo = (): {isPc: boolean,facilityName: string} => {
             break
         }
     }
-    return {isPc, facilityName}
+    return { isPc, facilityName }
 }
 
 export const getBrowserVar = (): variateType.facilityBrowserType | {} => {
@@ -29,10 +27,10 @@ export const getBrowserVar = (): variateType.facilityBrowserType | {} => {
     const { domain, URL: url, title, referrer } = document
     const { height: screenH, width: screenW, colorDepth: screenColorDepth } = window.screen
     const { language, platform } = navigator
-    return send<variateType.facilityBrowserType>({
+    return {
         sendTypeName: '设备数据',
-        isPc: isPc()
         isWx: isWx(),
+        pcInfo: getFacilityInfo(),
         domain,
         url,
         title,
@@ -42,5 +40,5 @@ export const getBrowserVar = (): variateType.facilityBrowserType | {} => {
         screenColorDepth,
         language,
         platform,
-    })
+    }
 }

@@ -2,6 +2,8 @@ declare namespace variateType {
     /** 设备参数 */
     export interface facilityBrowserType {
         /** send 类型 */
+        isWx: boolean
+        pcInfo: { isPc: boolean; facilityName: string }
         sendTypeName: string
         domain: string
         url: string
