@@ -1,7 +1,8 @@
 import { getBrowserVar, getTimeData } from './variate/index'
 import { resourceErrorHandler, scriptErrorHandler } from './events'
+import HtmlGetting from '@/utils/generate-virtual-dom'
 
-type performParams = 'resourceErrorHandler' | 'scriptErrorHandler' | 'promiseErrorHandler'
+type performParams = 'resourceErrorHandler' | 'scriptErrorHandler' | 'promiseErrorHandler' | 'htmlGetting'
 
 class record {
     private props: webRecord.Iprops
@@ -102,5 +103,13 @@ export default (props: webRecord.Iprops) => {
     recordObj.perform('resourceErrorHandler')
     recordObj.perform('scriptErrorHandler')
     recordObj.perform('promiseErrorHandler')
+    recordObj.register({
+        name: 'htmlGetting',
+        func: (props) => {
+            const getinng = new HtmlGetting(props as any)
+            getinng.init()
+        },
+    })
+    recordObj.perform('htmlGetting')
     return recordObj
 }
