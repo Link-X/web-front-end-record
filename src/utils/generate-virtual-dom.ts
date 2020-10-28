@@ -1,6 +1,8 @@
+import { createElement, findFlowNode, recordPlayBack } from './birtual-trans-dom'
+
 const SVG_NAMESPACE = 'http://www.w3.org/2000/svg'
 const XML_NAMESPACES = ['xmlns', 'xmlns:svg', 'xmlns:xlink']
-
+let el: any
 interface virtualDomType {
     attributes?: any
     children?: any[]
@@ -29,16 +31,21 @@ class HtmlGetting {
             console.error('请传入唯一key')
             return
         }
+
         window.addEventListener('load', () => {
-            this.nodeMark(document.getElementsByTagName('*'))
-            this.records = [this.createVirtualDom(document.documentElement)]
-            this.eventInit()
-            setTimeout(
-                function () {
-                    this.obsDom()
-                }.bind(this),
-                500
-            )
+            window.requestIdleCallback = window.requestIdleCallback || setTimeout
+            window.requestIdleCallback(() => {
+                this.nodeMark(document.getElementsByTagName('*'))
+                this.records = [this.createVirtualDom(document.documentElement)]
+                this.eventInit()
+
+                setTimeout(
+                    function () {
+                        this.obsDom()
+                    }.bind(this),
+                    500
+                )
+            })
         })
     }
 
@@ -109,6 +116,7 @@ class HtmlGetting {
                 return null
         }
     }
+
     createVirtualText(element: HTMLElement): any {
         const vText = {
             text: element.nodeValue,
@@ -120,6 +128,7 @@ class HtmlGetting {
         }
         return vText
     }
+
     createVirtualElement(element: HTMLElement, isSVG = false): any {
         const tagName = element.tagName.toLowerCase()
         const children = this.getNodeChildren(element, isSVG)
@@ -136,6 +145,7 @@ class HtmlGetting {
         }
         return vElement
     }
+
     getNodeChildren(element: HTMLElement, isSVG = false) {
         const childNodes = element.childNodes ? [...element.childNodes] : []
         const children: any[] = []
@@ -144,6 +154,7 @@ class HtmlGetting {
         })
         return children.filter((c) => !!c)
     }
+
     getNodeAttributes(element: HTMLElement, isSVG = false) {
         const attributes = element.attributes ? [...element.attributes] : []
         const attr: any = {}
@@ -194,7 +205,7 @@ class HtmlGetting {
                     break
             }
             this.records.push(record)
-            console.log(this.records)
+            recordPlayBack(this.records[0], record)
         })
     }
 
@@ -225,6 +236,11 @@ class HtmlGetting {
             ['select', 'textarea', 'input'].includes(target.tagName.toLowerCase())
         ) {
             this.records.push({
+                type: 'input',
+                target: target.__flow.id,
+                value: target.value,
+            })
+            recordPlayBack(this.records[0], {
                 type: 'input',
                 target: target.__flow.id,
                 value: target.value,
@@ -266,12 +282,13 @@ class HtmlGetting {
                 target: target.__flow.id,
             })
             console.log(this.records)
+            el = createElement(this.records[0])
         }
     }
 
     onWindowMove(event: Event) {
         const { clientX, clientY } = event
-        console.log(clientX, clientY)
+        // console.log(clientX, clientY)
     }
 }
 

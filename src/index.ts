@@ -1,6 +1,7 @@
 import { getBrowserVar, getTimeData } from './variate/index'
 import { resourceErrorHandler, scriptErrorHandler } from './events'
 import HtmlGetting from '@/utils/generate-virtual-dom'
+import { recordPlayBack, findFlowNode, createElement } from '@/utils/index'
 
 type performParams = 'resourceErrorHandler' | 'scriptErrorHandler' | 'promiseErrorHandler' | 'htmlGetting'
 
@@ -111,5 +112,11 @@ export default (props: webRecord.Iprops) => {
         },
     })
     recordObj.perform('htmlGetting')
-    return recordObj
+
+    return {
+        recordObj,
+        recordPlayBack,
+        findFlowNode,
+        createElement,
+    }
 }
