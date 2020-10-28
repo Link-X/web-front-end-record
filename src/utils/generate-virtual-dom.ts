@@ -1,3 +1,6 @@
+/**
+ * 收集用户操作的信息 生成虚拟dom
+ */
 import { createElement, findFlowNode, recordPlayBack } from './birtual-trans-dom'
 
 const SVG_NAMESPACE = 'http://www.w3.org/2000/svg'

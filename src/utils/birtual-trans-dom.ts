@@ -1,3 +1,4 @@
+/**将收集的vdom 渲染成真实dom */
 interface vdomType {
     attributes?: any
     children?: any[]
