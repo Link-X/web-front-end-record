@@ -69,7 +69,6 @@ class vdomPlay {
     removeNodes(removeArr: string[], target: string) {
         const targetData = this.findFlowNode([this.rootVdom], target)
         if(!targetData) {
-            // 父级删除导致子元素删除会生成多条数据，由于收集的时候先写入父，后续如果找不到父级则说明其已经不在不需要删除
             return
         }
         removeArr.forEach((v) => {
