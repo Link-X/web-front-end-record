@@ -23,7 +23,7 @@ class vdomPlay {
             }
             vdom.children.forEach((cnode: any) => {
                 const childNode: any = this.createElement(cnode)
-                if (childNode) {
+                if (childNode && vdom.tagName !== 'script') {
                     node.appendChild(childNode)
                 }
             })
