@@ -1,36 +1,27 @@
+import vdomPlay from './birtual-trans-dom'
+
 /**
  * 收集用户操作的信息 生成虚拟dom
  */
-import { createElement, findFlowNode, recordPlayBack } from './birtual-trans-dom'
-
 const SVG_NAMESPACE = 'http://www.w3.org/2000/svg'
 const XML_NAMESPACES = ['xmlns', 'xmlns:svg', 'xmlns:xlink']
 let el: any
-interface virtualDomType {
-    attributes?: any
-    children?: any[]
-    namespace?: any
-    tagName?: string
-    type?: string
-    target: string
-    value?: string
-    checked?: boolean
-}
 interface Iprops {
     key: string
+    sendEvent: (type: webRecord.sendType, data: any) => void
 }
 
 class HtmlGetting {
     private options: any
-    data: any
-    records: virtualDomType[]
+    props: Iprops
+    records: vdomType.vdomItemType[]
     constructor(props: Iprops) {
-        this.data = props
+        this.props = props
         this.records = []
     }
 
     init() {
-        if (!this.data.key) {
+        if (!this.props.key) {
             console.error('请传入唯一key')
             return
         }
@@ -54,7 +45,7 @@ class HtmlGetting {
 
     getkey() {
         return (
-            this.data.key +
+            this.props.key +
             (Math.random() * 10000000).toString(16).substr(0, 4) +
             '-' +
             new Date().getTime() +
@@ -109,7 +100,7 @@ class HtmlGetting {
         observer.observe(document.documentElement, options)
     }
 
-    createVirtualDom(element: HTMLElement, isSVG = false): virtualDomType {
+    createVirtualDom(element: HTMLElement, isSVG = false): vdomType.vdomItemType {
         switch (element.nodeType) {
             case Node.TEXT_NODE:
                 return this.createVirtualText(element)
@@ -207,14 +198,13 @@ class HtmlGetting {
                     })
                     break
             }
-            this.records.push(record)
-            recordPlayBack(this.records[0], record)
+            this.eventSend(record)
         })
     }
 
-    takeSnapshot(node: HTMLElement, options = {}) {
+    takeSnapshot(node: HTMLElement, options: any = {}) {
         this.markNodes(node)
-        const snapshot = {
+        const snapshot: any = {
             vdom: this.createVirtualDom(node),
         }
         if (options.doctype === true) {
@@ -238,12 +228,7 @@ class HtmlGetting {
             target.__flow &&
             ['select', 'textarea', 'input'].includes(target.tagName.toLowerCase())
         ) {
-            this.records.push({
-                type: 'input',
-                target: target.__flow.id,
-                value: target.value,
-            })
-            recordPlayBack(this.records[0], {
+            this.eventSend({
                 type: 'input',
                 target: target.__flow.id,
                 value: target.value,
@@ -258,7 +243,7 @@ class HtmlGetting {
                 target.tagName.toLowerCase() === 'input' &&
                 ['checkbox', 'radio'].includes(target.getAttribute('type'))
             ) {
-                this.records.push({
+                this.eventSend({
                     type: 'checked',
                     target: target.__flow.id,
                     checked: target.checked,
@@ -270,7 +255,7 @@ class HtmlGetting {
     onFormFocus(event: Event) {
         const target = event.target
         if (target && target.__flow) {
-            this.records.push({
+            this.eventSend({
                 type: 'focus',
                 target: target.__flow.id,
             })
@@ -280,17 +265,22 @@ class HtmlGetting {
     onFormBlur(event: Event) {
         const target = event.target
         if (target && target.__flow) {
-            this.records.push({
+            this.eventSend({
                 type: 'blur',
                 target: target.__flow.id,
             })
-            console.log(this.records)
-            el = createElement(this.records[0])
         }
+    }
+
+    eventSend(data: any) {
+        this.records.push(data)
+        this.props.sendEvent('vdomSend', this.records)
+        return data
     }
 
     onWindowMove(event: Event) {
         const { clientX, clientY } = event
+        this.props.sendEvent('mouseSend', { clientX, clientY })
         // console.log(clientX, clientY)
     }
 }

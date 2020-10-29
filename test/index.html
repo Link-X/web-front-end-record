@@ -8,17 +8,38 @@
     <link href="../dist/b/a.css" />
     <script src="../dist/web-front-end-record.umd.js"></script>
     <script>
+        let redoucs = []
         const test = record({
             key: 'key',
-            reportUrl: 'www.baidu.com',
             version: '0.0.1',
             outtime: 300,
+            log: true,
+            recording: true,
+            sendEvent: (type, data) => {
+                if (type === 'vdomSend') {
+                    redoucs = data
+                }
+            },
         })
-        console.log(test)
+        setTimeout(() => {
+            const pp = document.querySelector('#pp')
+            pp.addEventListener('click', () => {
+                console.log(redoucs.slice(1, redoucs.length))
+                paly = new test.vdomPlay({
+                    vdom: redoucs[0],
+                    records: redoucs.slice(1, redoucs.length),
+                })
+                paly.play((el) => {
+                    const sucess = document.querySelector("#sucess")
+                    console.log(el)
+                    sucess.innerHTML = el
+                })
+            })
+        }, 2000)
     </script>
     <script src="../asfd.js"></script>
     <body>
-        <!-- <img src="./aa.png" /> -->
+        <img src="./aa.png" />
         <div id="abc" class="cccc">1234</div>
         <div style="color: red">
             <p tag="a" class="aaa" style="background-color: royalblue">aaa</p>
@@ -27,9 +48,12 @@
         <div>
             <input value="333" id="input" />
         </div>
+        <div id="pp">播放</div>
+        <div id="333"></div>
+        <div id="sucess"></div>
     </body>
-    <!-- <script>
-        document.querySelector('#input').addEventListener('change',(e)=> {
+    <script>
+        document.querySelector('#input').addEventListener('change', (e) => {
             console.log(object)
         })
         var ccc = new Array(-1)
@@ -55,5 +79,5 @@
             var b = new Array(-1)
         }, 500)
         throw new Error('出错了！')
-    </script> -->
+    </script>
 </html>

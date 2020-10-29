@@ -23,7 +23,13 @@
     "url": "git+https://github.com/Link-X/web-front-end-record.git"
   },
   "author": "xudb",
-  "keywords": ["前端监控", "错误监控", "web监控", "js错误监控", "javaScript监控"],
+  "keywords": [
+    "前端监控",
+    "错误监控",
+    "web监控",
+    "js错误监控",
+    "javaScript监控"
+  ],
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Link-X/web-front-end-record/issues"
@@ -39,6 +45,7 @@
     "D": "^1.0.0",
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-preset-latest": "^6.24.1",
+    "core-js": "^3.6.5",
     "eslint": "^7.11.0",
     "eslint-config-standard-with-typescript": "^19.0.1",
     "husky": "^4.3.0",

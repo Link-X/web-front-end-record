@@ -1,4 +1,5 @@
 declare namespace webRecord {
+    type sendType = 'scriptError' | 'resourceError' | 'promiseError' | 'vdomSend' | 'mouseSend'
     export interface Iprops {
         /** 是否打印 */
         log: boolean
@@ -12,6 +13,9 @@ declare namespace webRecord {
         outtime: number
         /** 录屏 */
         recording: boolean
+
+        /** 上报钩子 */
+        sendEvent: (type: sendType, data: any) => void
     }
     export interface registerParamsType {
         name: string

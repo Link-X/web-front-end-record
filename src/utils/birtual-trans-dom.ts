@@ -1,130 +1,142 @@
 /**将收集的vdom 渲染成真实dom */
-interface vdomType {
-    attributes?: any
-    children?: any[]
-    childNodes?: any[]
-    namespace?: any
-    tagName?: string
-    type?: string
-    target: string
-    value?: string
-    checked?: boolean
-    __flow: { id: string }
-}
+import compose from './compose'
+class vdomPlay {
+    rootVdom: vdomType.vdomItemType
+    records: vdomType.recordsType[]
 
-interface recordsType {
-    type: 'childList' | 'focus' | 'input' | 'blur' | 'change' | 'attributes' | 'characterData'
-    target: string
-    removedNodes?: string[]
-    attributeValue?: string
-    attributeName?: string
-    value?: string
-    addedNodes?: {
-        previousSibling: string
-        nextSibling: string
-        vdom: vdomType
-    }[]
-}
+    constructor(props: { vdom: vdomType.vdomItemType; records: vdomType.recordsType[] }) {
+        this.rootVdom = props.vdom
+        this.records = props.records
+    }
 
-export const createElement = (vdom: vdomType, nodeFilter = (childNode: any) => true) => {
-    let node: any
-    if (vdom.type === 'VirtualText') {
-        node = document.createTextNode(vdom.text)
-    } else {
-        node =
-            typeof vdom.namespace === 'undefined'
-                ? document.createElement(vdom.tagName)
-                : document.createElementNS(vdom.namespace, vdom.tagName)
-        for (let name in vdom.attributes) {
-            node.setAttribute(name, vdom.attributes[name])
+    createElement(vdom: vdomType.vdomItemType) {
+        let node: any
+        if (vdom.type === 'VirtualText') {
+            node = document.createTextNode(vdom.text)
+        } else {
+            node =
+                typeof vdom.namespace === 'undefined'
+                    ? document.createElement(vdom.tagName)
+                    : document.createElementNS(vdom.namespace, vdom.tagName)
+            for (let name in vdom.attributes) {
+                node.setAttribute(name, vdom.attributes[name])
+            }
+            vdom.children.forEach((cnode: any) => {
+                const childNode: any = this.createElement(cnode)
+                if (childNode) {
+                    node.appendChild(childNode)
+                }
+            })
         }
-        vdom.children.forEach((cnode: any) => {
-            const childNode: any = createElement(cnode, nodeFilter)
-            if (childNode && nodeFilter(childNode)) {
-                node.appendChild(childNode)
+        if (vdom.__flow) {
+            node.classList && node.classList.add(vdom.__flow.id)
+            node.__flow = vdom.__flow
+        }
+        return node
+    }
+
+    findFlowNode(vdom: vdomType.vdomItemType[], flowId: string): any {
+        // const el = document.getElementsByTagName('*')
+        let items: any = null
+        vdom.forEach((item) => {
+            if (items) {
+                return
+            }
+            if (item.__flow.id === flowId) {
+                return (items = item)
+            }
+            if (item?.children?.length) {
+                return (items = this.findFlowNode(item.children, flowId))
+            }
+            if (item?.childNodes?.length) {
+                return (items = this.findFlowNode(item.childNodes, flowId))
             }
         })
+        return items
     }
-    if (vdom.__flow) {
-        node.classList && node.classList.add(vdom.__flow.id)
-        node.__flow = vdom.__flow
-    }
-    return node
-}
 
-export const findFlowNode = (vdom: vdomType[], flowId: string): any => {
-    // const el = document.getElementsByTagName('*')
-    let items: any = null
-    vdom.forEach((item) => {
-        if (items) {
+    addNodes(nodes: any[], target: string) {
+        const targetData = this.findFlowNode([this.rootVdom], target)
+        nodes.forEach((v) => {
+            const { nextSibling, previousSibling, vdom } = v
+            const appendid = nextSibling || previousSibling
+            const op = nextSibling ? 0 : +1
+            const index = targetData.children.findIndex((j: any) => j.__flow.id === appendid)
+            targetData.children.splice(index + op, 0, vdom)
+        })
+    }
+
+    removeNodes(removeArr: string[], target: string) {
+        const targetData = this.findFlowNode([this.rootVdom], target)
+        if(!targetData) {
+            // 父级删除导致子元素删除会生成多条数据，由于收集的时候先写入父，后续如果找不到父级则说明其已经不在不需要删除
             return
         }
-        if (item.__flow.id === flowId) {
-            return (items = item)
-        }
-        if (item?.children?.length) {
-            return (items = findFlowNode(item.children, flowId))
-        }
-        if (item?.childNodes?.length) {
-            return (items = findFlowNode(item.childNodes, flowId))
-        }
-    })
-    return items
-}
-
-const addNodes = (vdom: vdomType, nodes: any[], target: string) => {
-    const targetData = findFlowNode([vdom], target)
-    nodes.forEach((v) => {
-        const { nextSibling, previousSibling, vdom } = v
-        const appendid = nextSibling || previousSibling
-        const op = nextSibling ? 0 : +1
-        const index = targetData.children.findIndex((j: any) => j.__flow.id === appendid)
-        targetData.children.splice(index + op, 0, vdom)
-    })
-}
-
-const removeNodes = (vdom: vdomType, removeArr: string[], target: string) => {
-    const targetData = findFlowNode([vdom], target)
-    removeArr.forEach((v) => {
-        const index = targetData.children.findIndex((j: any) => j.__flow.id === v)
-        targetData.children.splice(index, 1)
-    })
-}
-
-const attributterChange = (vdom: vdomType, record: recordsType, target: string) => {
-    const targetData = findFlowNode([vdom], target)
-    targetData.attributes[record.attributeName] = record.attributeValue
-}
-
-const characterData = (vdom: vdomType, record: recordsType, target: string) => {
-    const targetData = findFlowNode([vdom], target)
-    targetData.text = record.value
-}
-
-
-export const recordPlayBack = (vdom: vdomType, record: recordsType) => {
-    const { target, removedNodes, addedNodes } = record
-    console.log(vdom, record)
-    switch (record.type) {
-        case 'childList':
-            if (addedNodes?.length) {
-                addNodes(vdom, addedNodes, target)
-            }
-            if (removedNodes.length) {
-                removeNodes(vdom, removedNodes, target)
-            }
-            break
-        case 'attributes':
-            attributterChange(vdom, record, target)
-        case 'characterData':
-            characterData(vdom, record, target)
-        case 'input':
-            attributterChange(
-                vdom,
-                { attributeName: 'value', attributeValue: record.value, target, type: 'input' },
-                target
-            )
+        removeArr.forEach((v) => {
+            const index = targetData.children.findIndex((j: any) => j.__flow.id === v)
+            targetData.children.splice(index, 1)
+        })
     }
-    const el = createElement(vdom)
-    console.log(el)
+
+    attributterChange(record: vdomType.recordsType, target: string) {
+        const targetData = this.findFlowNode([this.rootVdom], target)
+        targetData.attributes[record.attributeName] = record.attributeValue
+    }
+
+    characterData(record: vdomType.recordsType, target: string) {
+        const targetData = this.findFlowNode([this.rootVdom], target)
+        targetData.text = record.value
+    }
+
+    recordPlayBack(record: vdomType.recordsType) {
+        const { target, removedNodes, addedNodes, checked } = record
+        switch (record.type) {
+            case 'childList':
+                if (addedNodes?.length) {
+                    this.addNodes(addedNodes, target)
+                }
+                if (removedNodes.length) {
+                    this.removeNodes(removedNodes, target)
+                }
+                break
+            case 'attributes':
+                this.attributterChange(record, target)
+                break
+            case 'characterData':
+                this.characterData(record, target)
+                break
+            case 'input':
+                this.attributterChange(
+                    { attributeName: 'value', attributeValue: record.value, target, type: 'input' },
+                    target
+                )
+                break
+            case 'checked':
+                this.attributterChange(
+                    { attributeName: 'checked', attributeValue: checked, target, type: 'checked' },
+                    target
+                )
+                break
+        }
+        const el = this.createElement(this.rootVdom)
+        return el
+    }
+
+    play(cb: (el: HTMLElement) => void) {
+        const funcArr: any[] = []
+        this.records.forEach((v) => {
+            funcArr.push((e: any, next: Function) => {
+                setTimeout(() => {
+                    cb(this.recordPlayBack(v))
+                    next()
+                }, 500)
+            })
+        })
+        const fn = compose(funcArr)
+        fn(this, () => {
+            console.log(1234)
+        })
+    }
 }
+
+export default vdomPlay

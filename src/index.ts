@@ -1,7 +1,7 @@
 import { getBrowserVar, getTimeData } from './variate/index'
 import { resourceErrorHandler, scriptErrorHandler } from './events'
 import HtmlGetting from '@/utils/generate-virtual-dom'
-import { recordPlayBack, findFlowNode, createElement } from '@/utils/index'
+import vdomPlay from '@/utils/birtual-trans-dom'
 
 type performParams = 'resourceErrorHandler' | 'scriptErrorHandler' | 'promiseErrorHandler' | 'htmlGetting'
 
@@ -24,13 +24,13 @@ class record {
 
         this.methods = {
             resourceErrorHandler: (props: webRecord.Iprops) => {
-                this.eventMethod(document, 'error', resourceErrorHandler, true)
+                this.eventMethod(document, 'error', resourceErrorHandler, true, 'resourceError')
             },
             scriptErrorHandler: (props: webRecord.Iprops) => {
-                this.eventMethod(window, 'error', scriptErrorHandler, false)
+                this.eventMethod(window, 'error', scriptErrorHandler, false, 'scriptError')
             },
             promiseErrorHandler: (props: webRecord.Iprops) => {
-                this.eventMethod(window, 'unhandledrejection', scriptErrorHandler, false)
+                this.eventMethod(window, 'unhandledrejection', scriptErrorHandler, false, 'promiseError')
             },
         }
 
@@ -72,14 +72,15 @@ class record {
 
     eventMethod<E, D>(
         target: any,
-        type: string,
+        eventType: string,
         fn: (e: E, p: webRecord.Iprops) => D,
-        spread: boolean = false
+        spread: boolean = false,
+        sendType: webRecord.sendType
     ) {
         target.addEventListener(
-            type,
+            eventType,
             (event: E) => {
-                this.sendData<D>(fn(event, this.props))
+                this.sendData<D>(sendType, fn(event, this.props))
             },
             spread
         )
@@ -90,10 +91,11 @@ class record {
         this.plugins[name] = func
     }
 
-    sendData<T>(data: T): T {
+    sendData<T>(sendType: webRecord.sendType, data: T): T {
         setTimeout(() => {
-            this.props.log &&
-                console.log({ ...data, ...{ title: this.userData.browser.pcInfo }, ...this.props })
+            const sendData = { ...data, ...{ title: this.userData.browser.pcInfo }, ...this.props }
+            this.props.log && console.log(sendData)
+            this.props.sendEvent(sendType, sendData)
         }, this.props.outtime || 0)
         return data
     }
@@ -104,19 +106,17 @@ export default (props: webRecord.Iprops) => {
     recordObj.perform('resourceErrorHandler')
     recordObj.perform('scriptErrorHandler')
     recordObj.perform('promiseErrorHandler')
-    recordObj.register({
-        name: 'htmlGetting',
-        func: (props) => {
-            const getinng = new HtmlGetting(props as any)
-            getinng.init()
-        },
-    })
-    recordObj.perform('htmlGetting')
-
+    if (props.recording) {
+        recordObj.register({
+            name: 'htmlGetting',
+            func: (props) => {
+                const getinng = new HtmlGetting(props as any)
+                getinng.init()
+            },
+        })
+        recordObj.perform('htmlGetting')
+    }
     return {
-        recordObj,
-        recordPlayBack,
-        findFlowNode,
-        createElement,
+        vdomPlay,
     }
 }
