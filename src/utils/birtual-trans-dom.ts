@@ -9,8 +9,8 @@ class vdomPlay {
         this.records = props.records
     }
 
-    createElement(vdom: vdomType.vdomItemType) {
-        let node: any
+    createElement(vdom: vdomType.vdomItemType | vdomType.addNodesTYpe) {
+        let node: Text | HTMLElement
         if (vdom.type === 'VirtualText') {
             node = document.createTextNode(vdom.text)
         } else {
@@ -21,8 +21,8 @@ class vdomPlay {
             for (let name in vdom.attributes) {
                 node.setAttribute(name, vdom.attributes[name])
             }
-            vdom.children.forEach((cnode: any) => {
-                const childNode: any = this.createElement(cnode)
+            vdom.children.forEach((cnode) => {
+                const childNode = this.createElement(cnode)
                 if (childNode && vdom.tagName !== 'script') {
                     node.appendChild(childNode)
                 }
@@ -35,9 +35,9 @@ class vdomPlay {
         return node
     }
 
-    findFlowNode(vdom: vdomType.vdomItemType[], flowId: string): any {
+    findFlowNode(vdom: vdomType.vdomItemType[], flowId: string): vdomType.vdomItemType {
         // const el = document.getElementsByTagName('*')
-        let items: any = null
+        let items: vdomType.vdomItemType = null
         vdom.forEach((item) => {
             if (items) {
                 return
@@ -55,13 +55,13 @@ class vdomPlay {
         return items
     }
 
-    addNodes(nodes: any[], target: string) {
+    addNodes(nodes: vdomType.addNodesTYpe[], target: string) {
         const targetData = this.findFlowNode([this.rootVdom], target)
         nodes.forEach((v) => {
             const { nextSibling, previousSibling, vdom } = v
             const appendid = nextSibling || previousSibling
             const op = nextSibling ? 0 : +1
-            const index = targetData.children.findIndex((j: any) => j.__flow.id === appendid)
+            const index = targetData.children.findIndex((j) => j.__flow.id === appendid)
             targetData.children.splice(index + op, 0, vdom)
         })
     }
@@ -72,7 +72,7 @@ class vdomPlay {
             return
         }
         removeArr.forEach((v) => {
-            const index = targetData.children.findIndex((j: any) => j.__flow.id === v)
+            const index = targetData.children.findIndex((j) => j.__flow.id === v)
             targetData.children.splice(index, 1)
         })
     }
@@ -121,14 +121,17 @@ class vdomPlay {
         return el
     }
 
-    play(cb: (el: HTMLElement) => void) {
+    play(cb: (el: Text | HTMLElement) => void) {
         const fn = compose(
             this.records.map((v) => {
                 return (e: any, next: Function) => {
-                    setTimeout(() => {
-                        cb(this.recordPlayBack(v))
-                        next()
-                    }, v.preTime ? v.beginTime - v.preTime : 0)
+                    setTimeout(
+                        () => {
+                            cb(this.recordPlayBack(v))
+                            next()
+                        },
+                        v.preTime ? v.beginTime - v.preTime : 0
+                    )
                 }
             })
         )

@@ -1,7 +1,7 @@
 declare namespace vdomType {
     interface vdomItemType {
         attributes?: any
-        children?: any[]
+        children?: addNodesTYpe[]
         childNodes?: any[]
         namespace?: any
         tagName?: string
@@ -15,6 +15,19 @@ declare namespace vdomType {
         beginTime: number
     }
 
+    interface addNodesTYpe {
+        previousSibling: string
+        nextSibling: string
+        tagName?: string
+        type?: string
+        __flow?: { id: string }
+        namespace?: any
+        vdom: vdomItemType
+        attributes: any
+        text: string
+        children?: addNodesTYpe[]
+    }
+
     interface recordsType {
         type: 'childList' | 'focus' | 'input' | 'blur' | 'change' | 'attributes' | 'characterData' | 'checked'
         target: string
@@ -25,10 +38,6 @@ declare namespace vdomType {
         value?: string
         preTime: number
         beginTime: number
-        addedNodes?: {
-            previousSibling: string
-            nextSibling: string
-            vdom: vdomItemType
-        }[]
+        addedNodes?: addNodesTYpe[]
     }
 }

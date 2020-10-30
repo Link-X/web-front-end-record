@@ -5,7 +5,7 @@ import vdomPlay from './birtual-trans-dom'
  */
 const SVG_NAMESPACE = 'http://www.w3.org/2000/svg'
 const XML_NAMESPACES = ['xmlns', 'xmlns:svg', 'xmlns:xlink']
-let el: any
+
 interface Iprops {
     key: string
     sendEvent: (type: webRecord.sendType, data: any) => void
