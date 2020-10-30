@@ -30,7 +30,9 @@ class HtmlGetting {
             window.requestIdleCallback = window.requestIdleCallback || setTimeout
             window.requestIdleCallback(() => {
                 this.nodeMark(document.getElementsByTagName('*'))
-                this.records = [this.createVirtualDom(document.documentElement)]
+                this.records = [
+                    { ...this.createVirtualDom(document.documentElement), beginTime: 0, preTime: 0 },
+                ]
                 this.eventInit()
 
                 setTimeout(
@@ -177,6 +179,8 @@ class HtmlGetting {
             const record: any = {
                 type,
                 target: getFlowId(target as HTMLElement),
+                beginTime: new Date().getTime(),
+                preTime: this.records[this.records.length - 1].beginTime || 0,
             }
             switch (type) {
                 case 'characterData':

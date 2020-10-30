@@ -11,6 +11,8 @@ declare namespace vdomType {
         checked?: boolean
         text?: string
         __flow?: { id: string }
+        preTime: number
+        beginTime: number
     }
 
     interface recordsType {
@@ -21,6 +23,8 @@ declare namespace vdomType {
         attributeValue?: string | boolean
         attributeName?: string
         value?: string
+        preTime: number
+        beginTime: number
         addedNodes?: {
             previousSibling: string
             nextSibling: string

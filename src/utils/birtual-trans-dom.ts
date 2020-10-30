@@ -29,7 +29,7 @@ class vdomPlay {
             })
         }
         if (vdom.__flow) {
-            node.classList && node.classList.add(vdom.__flow.id)
+            // node.classList && node.classList.add(vdom.__flow.id)
             node.__flow = vdom.__flow
         }
         return node
@@ -68,7 +68,7 @@ class vdomPlay {
 
     removeNodes(removeArr: string[], target: string) {
         const targetData = this.findFlowNode([this.rootVdom], target)
-        if(!targetData) {
+        if (!targetData) {
             return
         }
         removeArr.forEach((v) => {
@@ -122,18 +122,18 @@ class vdomPlay {
     }
 
     play(cb: (el: HTMLElement) => void) {
-        const funcArr: any[] = []
-        this.records.forEach((v) => {
-            funcArr.push((e: any, next: Function) => {
-                setTimeout(() => {
-                    cb(this.recordPlayBack(v))
-                    next()
-                }, 500)
+        const fn = compose(
+            this.records.map((v) => {
+                return (e: any, next: Function) => {
+                    setTimeout(() => {
+                        cb(this.recordPlayBack(v))
+                        next()
+                    }, v.preTime ? v.beginTime - v.preTime : 0)
+                }
             })
-        })
-        const fn = compose(funcArr)
+        )
         fn(this, () => {
-            console.log(1234)
+            console.log('播放完毕')
         })
     }
 }

@@ -6,7 +6,7 @@
         <title>Document</title>
     </head>
     <!-- <link href="../dist/b/a.css" /> -->
-    <script src="./dist/web-front-end-record.umd.js"></script>
+    <script src="../dist/web-front-end-record.umd.js"></script>
     <script src="vdom.js"></script>
     <script>
         const test2 = record({
@@ -20,19 +20,21 @@
                 }
             },
         })
-        fetch('./vdom.json').then(res => {
-            console.log(res)
-        }).catch(err => {
-            console.log(err)
-        })
         window.onload = () => {
             paly2 = new test2.vdomPlay({
                 vdom: data[0],
                 records: data.slice(1, data.length),
             })
+            const iframe = document.createElement('iframe')
+            iframe.style.width =  `${window.innerWidth}px`
+            iframe.style.height = `${window.innerHeight}px`
+            document.body.appendChild(iframe)
+            const content = iframe.contentDocument
             paly2.play((el) => {
-                document.body.innerHTML = ''
-                document.body.appendChild(el)
+                content.open()
+                content.write(`<!doctype html><html><head></head><body></body></html>`)
+                content.close()
+                content.replaceChild(el, content.documentElement)
             })
         }
         // setTimeout(() => {
