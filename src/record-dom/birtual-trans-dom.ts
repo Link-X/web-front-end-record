@@ -22,7 +22,7 @@ class vdomPlay {
             for (let name in vdom.attributes) {
                 node.setAttribute(name, vdom.attributes[name])
             }
-            vdom.children.forEach((cnode) => {
+            vdom.children && vdom.children.forEach((cnode) => {
                 const childNode = this.createElement(cnode)
                 if (childNode && vdom.tagName !== 'script') {
                     node.appendChild(childNode)

@@ -36,6 +36,8 @@ record({
   key: 'key',// key
   version: '0.0.1',// 应用版本
   outtime: 300,// 上报延迟
+  start: () => {}// 开始
+  ready: () => {]}// 准备完毕
   recording: true // 是否录制屏幕录制屏幕原理j监听页面变化生成用户操记录以及生成当前页面虚拟dom, 最终上传的是一json数据.如需播放则引用birtual-trans-dom.ts(tip: 虽然我们录屏的方式是把dom转换成vdom，相比canvas能大幅减小体积，却依然很大，用户的随便操作录屏记录就能有几mb的大小。谨慎使用
   sendEvent(type: string, data: any) => {
     /// 所有监听事件触发经过这个钩子
