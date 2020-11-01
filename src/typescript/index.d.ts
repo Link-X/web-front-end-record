@@ -2,14 +2,11 @@ interface Window {
     requestIdleCallback: (cb: Function) => void
 }
 
-interface flowType {
-    __flow: {
-        id: string
-    }
+interface tagType {
     _tag: {
         id: string
     }
 }
-interface HTMLElement extends flowType {}
+interface HTMLElement extends tagType {}
 
-interface EventTarget extends flowType {}
+interface EventTarget extends tagType {}
