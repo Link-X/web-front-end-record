@@ -53,7 +53,7 @@ export default {
         terser(),
 
         alias({
-            entries: [{ find: '@/utils', replacement: resolve('./src/utils') }],
+            entries: [{ find: '@/utils', replacement: resolve('./src/utils') }, {find: '@', replacement: resolve('./src')}],
         }),
     ],
     external: [],

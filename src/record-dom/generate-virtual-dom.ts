@@ -120,6 +120,7 @@ class GenerateVDom extends Base {
 
     recordChange(item: vdomType.recordType) {
         this.records.push(item)
+        this.props.sendEvent('vdomSend', this.records)
     }
 
     obsDom() {

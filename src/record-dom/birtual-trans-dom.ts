@@ -35,25 +35,24 @@ class vdomPlay {
         return node
     }
 
-    findFlowNode(vdom: vdomType.virtualElement[], flowId: string): vdomType.virtualElement {
+    findTagNode(vdom: vdomType.virtualElement[], tagId: string): vdomType.virtualElement {
         // const el = document.getElementsByTagName('*')
         let items: vdomType.virtualElement = null
         vdom.forEach((item) => {
             if (items) {
                 return
             }
-            if (item._tag.id === flowId) {
+            if (item._tag.id === tagId) {
                 return (items = item)
             }
             if (item?.children?.length) {
-                return (items = this.findFlowNode(item.children, flowId))
+                return (items = this.findTagNode(item.children, tagId))
             }
         })
         return items
     }
 
-    addNodes(nodes: vdomType.addedNodesType[], target: string) {
-        const targetData = this.findFlowNode([this.rootVdom], target)
+    addNodes(nodes: vdomType.addedNodesType[], targetData: vdomType.virtualElement) {
         nodes.forEach((v) => {
             const { nextSibling, previousSibling, vdom } = v
             const appendid = nextSibling || previousSibling
@@ -63,8 +62,7 @@ class vdomPlay {
         })
     }
 
-    removeNodes(removeArr: string[], target: string) {
-        const targetData = this.findFlowNode([this.rootVdom], target)
+    removeNodes(removeArr: string[], targetData: vdomType.virtualElement) {
         if (!targetData) {
             return
         }
@@ -74,35 +72,33 @@ class vdomPlay {
         })
     }
 
-    attributterChange(record: vdomType.recordType, target: string) {
-        const targetData = this.findFlowNode([this.rootVdom], target)
+    attributterChange(record: vdomType.recordType, targetData: vdomType.virtualElement) {
         targetData.attributes[record.attributeName] = record.attributeValue
     }
 
-    characterData(record: vdomType.recordType, target: string) {
-        const targetData = this.findFlowNode([this.rootVdom], target)
+    characterData(record: vdomType.recordType, targetData: vdomType.virtualElement) {
         targetData.text = record.value
     }
 
     optionsMethods = {
-        childList: (record: vdomType.recordType, target: string) => {
+        childList: (record: vdomType.recordType, targetData: vdomType.virtualElement) => {
             const { removedNodes, addedNodes } = record
             if (addedNodes?.length) {
-                this.addNodes(addedNodes, target)
+                this.addNodes(addedNodes, targetData)
             }
             if (removedNodes.length) {
-                this.removeNodes(removedNodes, target)
+                this.removeNodes(removedNodes, targetData)
             }
         },
         characterData: this.characterData,
         attributes: this.attributterChange,
-        input: (record: vdomType.recordType, target: string) => {
+        input: (record: vdomType.recordType, targetData: vdomType.virtualElement) => {
             const params = { ...record, ...{ attributeName: 'value', attributeValue: record.value } }
-            this.attributterChange(params, target)
+            this.attributterChange(params, targetData)
         },
-        checked: (record: vdomType.recordType, target: string) => {
+        checked: (record: vdomType.recordType, targetData: vdomType.virtualElement) => {
             const params = { ...record, ...{ attributeName: 'checked', attributeValue: record.checked } }
-            this.attributterChange(params, params.target)
+            this.attributterChange(params, targetData)
         },
         focus: () => {},
         blur: () => {},
@@ -110,8 +106,9 @@ class vdomPlay {
 
     recordPlayBack(record: vdomType.recordType) {
         const { target, type } = record
+        const targetData = this.findTagNode([this.rootVdom], target)
         const fn = this.optionsMethods[type]
-        fn && fn(record, target)
+        fn && fn(record, targetData)
         return this.createElement(this.rootVdom)
     }
 
@@ -124,7 +121,7 @@ class vdomPlay {
                             cb(this.recordPlayBack(v))
                             next()
                         },
-                        v.preTime ? v.beginTime - v.preTime : 0
+                        v.preTime ? (v.beginTime - v.preTime) / 1.5 : 0
                     )
                 }
             })
