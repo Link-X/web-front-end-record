@@ -6,6 +6,9 @@ interface flowType {
     __flow: {
         id: string
     }
+    _tag: {
+        id: string
+    }
 }
 interface HTMLElement extends flowType {}
 

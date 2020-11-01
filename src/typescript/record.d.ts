@@ -1,21 +1,25 @@
 declare namespace webRecord {
-    type sendType = 'scriptError' | 'resourceError' | 'promiseError' | 'vdomSend' | 'mouseSend'
-    export interface Iprops {
-        /** 是否打印 */
-        log: boolean
+    type sendType = 'scriptError' | 'resourceError' | 'promiseError' | 'vdomSend' | 'mouseSend' | 'userData'
 
+    interface userDataType {
+        browser: variateType.facilityBrowserType
+        timeData: variateType.getTimeData
+    }
+    export interface Iprops {
+        /**输一个自定义的key */
         key: string
-        /** 上报url */
-        reportUrl: string
         /** 版本号 */
         version: string
         /** 上报延时 */
         outtime: number
-        /** 录屏 */
+        /** 是否录屏 */
         recording: boolean
-
         /** 上报钩子 */
-        sendEvent: (type: sendType, data: any) => void
+        sendEvent?: (type: sendType, data: any) => void
+        /** start */
+        start?: () => void
+        /** reday */
+        reday?: (type: string, userData: userDataType) => void
     }
     export interface registerParamsType {
         name: string

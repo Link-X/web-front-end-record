@@ -1,43 +1,45 @@
 declare namespace vdomType {
-    interface vdomItemType {
-        attributes?: any
-        children?: addNodesTYpe[]
-        childNodes?: any[]
-        namespace?: any
-        tagName?: string
-        type?: string
-        target: string
-        value?: string
-        checked?: boolean
-        text?: string
-        __flow?: { id: string }
-        preTime: number
-        beginTime: number
+    interface tagType {
+        id: string
     }
 
-    interface addNodesTYpe {
-        previousSibling: string
-        nextSibling: string
-        tagName?: string
-        type?: string
-        __flow?: { id: string }
-        namespace?: any
-        vdom: vdomItemType
-        attributes: any
+    type vDom = virtualElement | virtualTextType
+
+    interface virtualTextType {
         text: string
-        children?: addNodesTYpe[]
+        type: 'virtualText'
+        _tag: tagType
     }
 
-    interface recordsType {
-        type: 'childList' | 'focus' | 'input' | 'blur' | 'change' | 'attributes' | 'characterData' | 'checked'
+    interface virtualElement {
+        tagName: string
+        type: 'virtualElement'
+        children: virtualElement[]
+        attributes: { [name: string]: any }
+        namespace: string
+        _tag: tagType
+        text?: string
+    }
+
+    interface addedNodesType {
+        vdom: vDom
+        doctype?: string
+        clientWidth?: number
+        clientHeight?: number
+        nextSibling?: string
+        previousSibling?: string
+    }
+
+    interface recordType {
+        type: MutationRecordType | 'input' | 'checked' | 'focus' | 'blur'
         target: string
-        checked?: boolean
-        removedNodes?: string[]
-        attributeValue?: string | boolean
-        attributeName?: string
-        value?: string
-        preTime: number
         beginTime: number
-        addedNodes?: addNodesTYpe[]
+        preTime: number
+        value?: string
+        attributeName?: string
+        attributeValue?: string
+        removedNodes?: string[]
+        addedNodes?: addedNodesType[]
+        checked?: any
     }
 }

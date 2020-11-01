@@ -1,7 +1,7 @@
 import { getBrowserVar, getTimeData } from './variate/index'
 import { resourceErrorHandler, scriptErrorHandler } from './events'
-import HtmlGetting from '@/utils/generate-virtual-dom'
-import vdomPlay from '@/utils/birtual-trans-dom'
+import HtmlGetting from '@/record-dom/generate-virtual-dom'
+import vdomPlay from '@/record-dom/birtual-trans-dom'
 
 type performParams = 'resourceErrorHandler' | 'scriptErrorHandler' | 'promiseErrorHandler' | 'htmlGetting'
 
