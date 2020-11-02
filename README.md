@@ -54,7 +54,7 @@ record({
   version: '0.0.1',
   outtime: 300,
   start: () => {},
-  ready: () => {]},
+  ready: () => {},
   recording: true,
   sendEvent(type: string, data: any) => {
     /// 所有监听事件触发经过这个钩子

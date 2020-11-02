@@ -2,7 +2,7 @@
   "name": "web-front-end-record",
   "version": "0.0.2",
   "description": "this is simpleness record in web-front-end-record project. 这是一个js性能和错误报告jsdk",
-  "main": "./src/main.js",
+  "main": "./index.js",
   "scripts": {
     "build:esm": "rollup -c --environment MODULE:esm",
     "build:umd": "rollup -c --environment MODULE:umd",
