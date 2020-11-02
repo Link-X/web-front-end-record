@@ -35,10 +35,10 @@ import record from 'web-front-end-record'
 record({
   key: 'key',// key
   version: '0.0.1',// 应用版本
-  outtime: 300,// 上报延迟
-  start: () => {}// 开始
-  ready: () => {]}// 准备完毕
-  recording: true // 是否录制屏幕录制屏幕原理j监听页面变化生成用户操记录以及生成当前页面虚拟dom, 最终上传的是一json数据.如需播放则引用birtual-trans-dom.ts(tip: 虽然我们录屏的方式是把dom转换成vdom，相比canvas能大幅减小体积，却依然很大，用户的随便操作录屏记录就能有几mb的大小。谨慎使用
+  outtime: 300, // 上报延迟
+  start: () => {}, // 开始
+  ready: () => {]}, // 准备完毕
+  recording: true, // 是否录制屏幕录制屏幕原理j监听页面变化生成用户操记录以及生成当前页面虚拟dom, 最终上传的是一json数据.如需播放则引用birtual-trans-dom.ts(tip: 虽然我们录屏的方式是把dom转换成vdom，相比canvas能大幅减小体积，却依然很大，用户的随便操作录屏记录就能有几mb的大小。谨慎使用
   sendEvent(type: string, data: any) => {
     /// 所有监听事件触发经过这个钩子
     ......
@@ -50,23 +50,27 @@ record({
 // or
 <script src="web-front-end-record/dist/web-front-end-record.umd.js"><script>
 record({
-  key: 'key',// key
-  version: '0.0.1',// 应用版本
-  outtime: 300,// 上报延迟
-  recording: true // 是否录制屏幕(录制屏幕原理j监听页面变化生成用户操记录以及生成当前页面虚拟dom, 最终上传的是一json数据).如需播放则引用birtual-trans-dom.ts
+  key: 'key',
+  version: '0.0.1',
+  outtime: 300,
+  start: () => {},
+  ready: () => {]},
+  recording: true,
   sendEvent(type: string, data: any) => {
-    /// 所有j监听事件触发经过这个钩子
+    /// 所有监听事件触发经过这个钩子
     ......
   }
 })
+
+
 ```
 
 ```javascript
 // 播放
 import record from 'web-front-end-record'
-const obj = record({key: 'key', recording: true})
+const obj = record({ key: 'key', recording: true })
 window.onload = () => {
-    paly = new obj.birtualTransDom({
+    paly2 = new test2.birtualTransDom({
         vdom: data[0],
         records: data.slice(1, data.length),
     })
@@ -75,7 +79,7 @@ window.onload = () => {
     iframe.style.height = `${window.innerHeight}px`
     document.body.appendChild(iframe)
     const content = iframe.contentDocument
-    paly.play((el) => {
+    paly2.play((el) => {
         content.open()
         content.write(`<!doctype html><html><head></head><body></body></html>`)
         content.close()
@@ -83,7 +87,3 @@ window.onload = () => {
     })
 }
 ```
-
-## 遗留问题
-2、播放时由于每次执行都将所有 dom 全部更新，这里可以采用按需更新方式  
-3、错误记录与 soucre.map 的链接
