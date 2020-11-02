@@ -68,8 +68,8 @@ class Record extends Base {
 export default (props: webRecord.Iprops) => {
     const recordObj = new Record(props)
     return {
-        /** 播放类, 监听无关 */
         recordObj,
+        /** 播放类, 与监听无关 */
         birtualTransDom,
     }
 }

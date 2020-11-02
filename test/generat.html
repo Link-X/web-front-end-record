@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <script src="../dist/web-front-end-record.umd.js"></script>
+    <script src="./vdom.js"></script>
+    <style>
+      #aaa {
+        color: aqua;
+        width: 500px;
+        height: 30px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+      }
+    </style>
+    <script>
+        var test2 = record({
+            key: 'key', // key
+            version: '0.0.1', // 应用版本
+            outtime: 300, // 上报延迟
+            recording: true, // 是否录制屏幕(录制屏幕原理j监听页面变化生成用户操记录以及生成当前页面虚拟dom, 最终上传的是一json数据).如需播放则引用birtual-trans-dom.ts
+            sendEvent(type, data) {
+                if (type === 'vdomSend') {
+                    console.log(data)
+                }
+            },
+        })
+    </script>
+    <body>
+        <div>1234</div>
+        <input id="aaa"/ >
+        <div class="asdf" style="color: red">test</div>
+        <div>
+            test2
+            <div style="background: red">
+                test3
+                <span>aaa</span>
+            </div>
+        </div>
+        <div>
+            <input type="checkbox" style="color: pink" />
+        </div>
+    </body>
+</html>

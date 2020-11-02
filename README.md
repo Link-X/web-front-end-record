@@ -66,7 +66,7 @@ record({
 import record from 'web-front-end-record'
 const obj = record({key: 'key', recording: true})
 window.onload = () => {
-    paly = new obj.vdomPlay({
+    paly = new obj.birtualTransDom({
         vdom: data[0],
         records: data.slice(1, data.length),
     })
@@ -85,7 +85,5 @@ window.onload = () => {
 ```
 
 ## 遗留问题
-
-1、播放时时间顺序有问题导致播放卡顿  
 2、播放时由于每次执行都将所有 dom 全部更新，这里可以采用按需更新方式  
 3、错误记录与 soucre.map 的链接

@@ -9,7 +9,7 @@ export default function compose(middleware: any[]) {
         let index = -1
         return dispatch(0)
         function dispatch(i: number) {
-            if (i <= index) return Promise.reject(new Error('多次调用同一函数'))
+            if (i <= index) return Promise.reject(new Error('多次调用同一组函数'))
             index = i
             let fn = middleware[i]
             if (i === middleware.length) fn = next
