@@ -58,7 +58,7 @@ class vdomPlay {
             const appendid = nextSibling || previousSibling
             const op = nextSibling ? 0 : +1
             const index = targetData.children.findIndex((j) => j._tag.id === appendid)
-            targetData.children.splice(index + op, 0, vdom)
+            targetData.children.splice(index + op, 0, vdom as any)
         })
     }
 

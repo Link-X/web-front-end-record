@@ -1,4 +1,4 @@
-const performance: Performance = window.performance || window.msPerformance || window.webkitPerformance
+const performance: Performance = window.performance
 
 /** 获取超时文件 */
 const getTimeoutRes = (): variateType.timeOutDataType[] => {
@@ -34,7 +34,7 @@ export const countTime = (): variateType.loadType => {
         domContentLoadedEventStart,
         domContentLoadedEventEnd,
         loadEventStart,
-    } = performance.timing ? performance.timing : performance.getEntriesByType('navigation')
+    } = performance.timing
     return {
         fpt: responseEnd - fetchStart,
         tti: domInteractive - fetchStart,
