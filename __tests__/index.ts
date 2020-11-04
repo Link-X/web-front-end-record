@@ -1,11 +1,10 @@
 import record from '../src/index'
 
 import birtualDom from '../src/record-dom/birtual-trans-dom'
-import { Record as recordClass } from '../src/index'
 
 test('methods not undefined', () => {
     const recordObj: {
-        recordObj: recordClass
+        recordObj: any
         birtualTransDom: typeof birtualDom
     } = record({
         key: 'key',
@@ -13,7 +12,6 @@ test('methods not undefined', () => {
         outtime: 300,
         recording: true,
         sendEvent: (type, data) => {
-            console.log(data, type)
         },
     })
     expect(recordObj).not.toBeUndefined()
