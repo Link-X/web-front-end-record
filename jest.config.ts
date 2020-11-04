@@ -60,65 +60,7 @@ export default {
     // globalTeardown: undefined,
 
     // A set of global variables that need to be available in all test environments
-    globals: {
-        performance: {
-            getEntriesByType: (type: string) => {
-                const data: any = {
-                    resource: [
-                        {
-                            connectEnd: 0,
-                            connectStart: 0,
-                            decodedBodySize: 0,
-                            domainLookupEnd: 0,
-                            domainLookupStart: 0,
-                            duration: 0,
-                            encodedBodySize: 0,
-                            entryType: 'resource',
-                            fetchStart: 18.604999990202487,
-                            initiatorType: 'script',
-                            name: 'file:///D:/github/web-front-end-record/test/aa.js',
-                            nextHopProtocol: '',
-                            redirectEnd: 0,
-                            redirectStart: 0,
-                            requestStart: 0,
-                            responseEnd: 18.604999990202487,
-                            responseStart: 0,
-                            secureConnectionStart: 0,
-                            startTime: 18.604999990202487,
-                            transferSize: 0,
-                            workerStart: 0,
-                            serverTiming: [],
-                        },
-                        {
-                            connectEnd: 0,
-                            connectStart: 0,
-                            decodedBodySize: 0,
-                            domainLookupEnd: 0,
-                            domainLookupStart: 0,
-                            duration: 0,
-                            encodedBodySize: 0,
-                            entryType: 'resource',
-                            fetchStart: 18.875000008847564,
-                            initiatorType: 'img',
-                            name: 'file:///D:/github/web-front-end-record/test/aa.png',
-                            nextHopProtocol: '',
-                            redirectEnd: 0,
-                            redirectStart: 0,
-                            requestStart: 0,
-                            responseEnd: 18.875000008847564,
-                            responseStart: 0,
-                            secureConnectionStart: 0,
-                            serverTiming: [],
-                            startTime: 18.875000008847564,
-                            transferSize: 0,
-                            workerStart: 0,
-                        },
-                    ],
-                }
-                return data[type]
-            },
-        },
-    },
+    globals: {},
 
     // The maximum amount of workers used to run your tests. Can be specified as % or a number. E.g. maxWorkers: 10% will use 10% of your CPU amount + 1 as the maximum worker number. maxWorkers: 2 will use a maximum of 2 workers.
     // maxWorkers: "50%",
@@ -223,7 +165,7 @@ export default {
     // testRunner: "jasmine2",
 
     // This option sets the URL for the jsdom environment. It is reflected in properties such as location.href
-    // testURL: "http://localhost",
+    testURL: "http://127.0.0.1:8080/error.html",
 
     // Setting this value to "fake" allows the use of fake timers for functions such as "setTimeout"
     // timers: "real",

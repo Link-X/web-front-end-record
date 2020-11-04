@@ -1,6 +1,7 @@
 interface Window {
     requestIdleCallback: (cb: Function) => void
 }
+interface PerformanceTiming {}
 
 interface PerformanceEntry {
     responseEnd: number

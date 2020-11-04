@@ -20,6 +20,7 @@ const getTimeoutRes = (): variateType.timeOutDataType[] => {
 }
 
 export const countTime = (): variateType.loadType => {
+    console.log(performance.timing)
     const {
         fetchStart,
         domainLookupStart,

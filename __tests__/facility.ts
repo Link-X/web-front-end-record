@@ -27,6 +27,6 @@ test('browser info', () => {
         screenW: 0,
         sendTypeName: '设备数据',
         title: '',
-        url: 'http://localhost/',
+        url: 'http://127.0.0.1:8080/error.html',
     })
 })
