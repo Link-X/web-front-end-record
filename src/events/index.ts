@@ -6,6 +6,7 @@ export const resourceErrorHandler = (event: ErrorEvent) => {
         sendTypeName: '资源加载错误',
         tagName: target.tagName.toLowerCase(),
         src: target.getAttribute('src'),
+        baseURI: target.baseURI,
     }
 }
 
@@ -35,7 +36,7 @@ export const scriptErrorHandler = (event: ErrorEvent) => {
         filename,
         lineno,
         colno,
-        stack: error?.stac?.toString(),
+        stack: error?.stack?.toString(),
         type,
     }
 }

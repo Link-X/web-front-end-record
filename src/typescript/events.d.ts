@@ -7,6 +7,8 @@ declare namespace eventsType {
         tagName: string
         /** url */
         src: string
+        /**目标路径 */
+        baseURI:string
     }
 
     /** script 错误上报信息 */

@@ -14,6 +14,7 @@ interface EventTarget {
     tagName: string
     value: any
     checked: any
+    baseURI: string
     getAttribute(qualifiedName: string): string | null
 }
 
