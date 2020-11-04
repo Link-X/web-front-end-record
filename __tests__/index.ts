@@ -1,9 +1,12 @@
 import record from '../src/index'
 
+import birtualDom from '../src/record-dom/birtual-trans-dom'
+import { Record as recordClass } from '../src/index'
+
 test('methods not undefined', () => {
     const recordObj: {
-        recordObj: object
-        birtualTransDom: object
+        recordObj: recordClass
+        birtualTransDom: typeof birtualDom
     } = record({
         key: 'key',
         version: '0.0.1',

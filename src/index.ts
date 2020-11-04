@@ -7,7 +7,7 @@ import birtualTransDom from '@/record-dom/birtual-trans-dom'
 import Base from './base'
 
 const fn = () => {}
-class Record extends Base {
+export class Record extends Base {
     public props: webRecord.Iprops
 
     constructor(props: webRecord.Iprops) {
