@@ -22,12 +22,13 @@ class vdomPlay {
             for (let name in vdom.attributes) {
                 node.setAttribute(name, vdom.attributes[name])
             }
-            vdom.children && vdom.children.forEach((cnode) => {
-                const childNode = this.createElement(cnode)
-                if (childNode && vdom.tagName !== 'script') {
-                    node.appendChild(childNode)
-                }
-            })
+            vdom.children &&
+                vdom.children.forEach((cnode) => {
+                    const childNode = this.createElement(cnode)
+                    if (childNode && vdom.tagName !== 'script') {
+                        node.appendChild(childNode)
+                    }
+                })
         }
         if (vdom._tag) {
             node._tag = vdom._tag
@@ -112,23 +113,35 @@ class vdomPlay {
         return this.createElement(this.rootVdom)
     }
 
-    play(cb: (el: Text | Element) => void) {
-        const fn = compose(
-            this.records.map((v) => {
-                return (e: any, next: Function) => {
-                    setTimeout(
-                        () => {
-                            cb(this.recordPlayBack(v))
-                            next()
-                        },
-                        v.preTime ? (v.beginTime - v.preTime) / 1.5 : 0
-                    )
-                }
+    play() {
+        window.onload = () => {
+            const iframe = document.createElement('iframe')
+            iframe.style.width = `${window.innerWidth}px`
+            iframe.style.height = `${window.innerHeight}px`
+            document.body.appendChild(iframe)
+            const content = iframe.contentDocument
+            content.open()
+            content.write(`<!doctype html><html><head></head><body></body></html>`)
+            content.close()
+            const fn = compose(
+                this.records.map((v) => {
+                    return (e: any, next: Function) => {
+                        window.requestAnimationFrame(() => {
+                            setTimeout(
+                                () => {
+                                    content.replaceChild(this.recordPlayBack(v), content.documentElement)
+                                    next()
+                                },
+                                v.preTime ? (v.beginTime - v.preTime) / 1.5 : 0
+                            )
+                        })
+                    }
+                })
+            )
+            fn(this, () => {
+                console.log('播放完毕')
             })
-        )
-        fn(this, () => {
-            console.log('播放完毕')
-        })
+        }
     }
 }
 

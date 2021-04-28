@@ -37,8 +37,14 @@ class Base {
 
     sendData<T>(sendType: webRecord.sendType, data: T): T {
         setTimeout(() => {
-            const sendData = { ...data, ...this.props }
-            this.props.sendEvent(sendType, sendData)
+            try {
+                const sendData = { ...data, ...this.props }
+                if (typeof this.props.sendEvent === 'function') {
+                    this.props.sendEvent(sendType, sendData)
+                }
+            } catch (err) {
+                console.error('record errr')
+            }
         }, this.props.outtime || 0)
         return data
     }

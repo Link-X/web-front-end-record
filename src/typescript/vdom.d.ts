@@ -19,6 +19,7 @@ declare namespace vdomType {
         namespace: string
         _tag: tagType
         text?: string
+       changeDom?: boolean 
     }
 
     interface addedNodesType {

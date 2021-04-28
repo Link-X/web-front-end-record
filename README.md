@@ -30,7 +30,7 @@ npm install web-front-end-record
 ```
 
 ```javascript
-import record from 'web-front-end-record'
+import {Record} from 'web-front-end-record'
 record({
   key: 'key',// key
   version: '0.0.1',// 应用版本
@@ -48,7 +48,7 @@ record({
 
 // or
 <script src="web-front-end-record/dist/web-front-end-record.umd.js"><script>
-record({
+Record.record({
   key: 'key',
   version: '0.0.1',
   outtime: 300,
@@ -65,24 +65,14 @@ record({
 ```
 
 ```javascript
-// 播放
-import record from 'web-front-end-record'
-const obj = record({ key: 'key', recording: true })
+// 播放 参考/test/play
+import {BirtualTransDom} from 'web-front-end-record'
+const obj = BirtualTransDom({ key: 'key', recording: true })
 window.onload = () => {
     paly2 = new test2.birtualTransDom({
         vdom: data[0],
         records: data.slice(1, data.length),
     })
-    const iframe = document.createElement('iframe')
-    iframe.style.width = `${window.innerWidth}px`
-    iframe.style.height = `${window.innerHeight}px`
-    document.body.appendChild(iframe)
-    const content = iframe.contentDocument
-    paly2.play((el) => {
-        content.open()
-        content.write(`<!doctype html><html><head></head><body></body></html>`)
-        content.close()
-        content.replaceChild(el, content.documentElement)
-    })
+    paly2.play()
 }
 ```
